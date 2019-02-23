@@ -63,6 +63,14 @@ class MongoDBCredentials(BaseCredentials):
 
     def __init__(self, username=None, password=None,
                  source=None, mechanism=None, ssl_obj=None):
+        """ MongoDB Credentials Provider
+
+        :param username: str username
+        :param password: str password
+        :param source: str credentials source
+        :param mechanism: str credentials mechanism
+        :param ssl_obj: obj MongoDBSSLCredentials
+        """
         self.auth_username = username
         self.auth_password = password
         self.auth_source = source
