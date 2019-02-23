@@ -1,2 +1,2 @@
 # pynosql
-No SQL DB Library
+No SQL DB Library for Python
