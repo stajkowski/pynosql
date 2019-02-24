@@ -135,5 +135,5 @@ class MongoDBCredentials(BaseCredentials):
         if self.ssl_detail:
             if not isinstance(self.ssl_detail, MongoDBSSLCredentials):
                 raise InvalidCredentials(
-                    'SSL is not an instance of MongoDBSSLCredentials')
+                    'SSL is not an instance of MongoDBSSLCredentials.')
             self.ssl_enabled = True
