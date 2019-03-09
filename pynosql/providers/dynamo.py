@@ -21,3 +21,5 @@ class DynamoDBProvider(BaseProvider):
         """
         table = self._aws_client.client.Table(table)
         response = self._aws_client.call(table.get_item, **kwargs)
+        # tmp replace when model integrated
+        return response
