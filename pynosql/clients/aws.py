@@ -22,7 +22,7 @@ class AWSClient(BaseClient):
         :param region: str region name
         :param retries: int client retries
         :param endpoint: str endpoint url
-        :param mock: bool set to mock responses
+        :param mock: obj method to mock responses
         """
         self.credentials = credentials
         self.region = region

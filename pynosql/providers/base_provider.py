@@ -46,12 +46,11 @@ class BaseProvider():
         """
 
     @abstractmethod
-    def put_record(self, model, table, record, **kwargs):
+    def put_record(self, model, table, **kwargs):
         """ Put record into DB
 
         :param model: obj BaseModel
         :param table: str table
-        :param record: dict record
         :return: bool status
         :raises: ClientException
         """

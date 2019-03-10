@@ -50,18 +50,17 @@ class DynamoDBProvider(BaseProvider):
         response = self._aws_client.call(table.scan, **kwargs)
         return self._handle_response(model, response, 'Items')
 
-    def put_record(self, model, table, record, **kwargs):
+    def put_record(self, model, table, **kwargs):
         """ Put record into DB
 
         :param model: obj BaseModel
         :param table: str table
-        :param record: dict record
         :return: bool status
         :raises: ClientException
         """
         table = self._aws_client.client.Table(table)
         response = self._aws_client.call(table.put_item, **kwargs)
-        return self._handle_response(model, response, None)
+        return self._handle_response(model, response, 'Attributes')
 
     def delete_record(self, model, table, **kwargs):
         """ Delete record from DB
@@ -73,7 +72,7 @@ class DynamoDBProvider(BaseProvider):
         """
         table = self._aws_client.client.Table(table)
         response = self._aws_client.call(table.delete_item, **kwargs)
-        return self._handle_response(model, response, None)
+        return self._handle_response(model, response, 'Attributes')
 
     def _handle_response(self, model, data, key):
         """ Handle Response of Dynamo Operation

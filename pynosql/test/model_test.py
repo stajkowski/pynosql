@@ -60,6 +60,48 @@ class TestSetup(unittest.TestCase):
         mh.load(values)
         self.assertDictEqual(mh.model, expected)
 
+    def test_basic_model_with_multiple_nested_structure(self):
+        """ Test valid model load of multiple nested structure """
+        values = {
+            'test1': 'value1',
+            'test2': {
+                'sub1': 'subvalue1',
+                'sub2': 'subvalue2',
+                'sub3': {
+                    'nested1': 'nestedvalue1'
+                }
+            },
+            'test3': 'value3'
+        }
+        expected = {
+            'test1': 'value1',
+            'test2': {
+                'sub1': 'subvalue1',
+                'sub2': 'subvalue2',
+                'sub3': {
+                    'nested1': 'nestedvalue1',
+                    'nested2': None,
+                }
+            },
+            'test3': 'value3',
+            'test4': None
+        }
+        mh = ModelHelper({
+            'test1': None,
+            'test2': {
+                'sub1': None,
+                'sub2': None,
+                'sub3': {
+                    'nested1': None,
+                    'nested2': None,
+                }
+            },
+            'test3': None,
+            'test4': None
+        })
+        mh.load(values)
+        self.assertDictEqual(mh.model, expected)
+
     def test_basic_model_with_non_present_keys(self):
         """ Test valid model with keys not present in model """
         values = {
