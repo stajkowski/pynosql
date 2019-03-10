@@ -50,6 +50,8 @@ class ModelHelper(BaseModelHelper):
             for k, v in values.items():
                 self._load(k, v, self._model)
 
+        return self.model
+
     def _load(self, key, value, structure):
         """ Recursively Load K/V into Model Structure
 
