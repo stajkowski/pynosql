@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="pynosql-stajkowski100",
+    name="pynosql",
     version="0.0.1",
     author="Brian Stajkowski",
     author_email="stajkowski100@gmail.com",

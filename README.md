@@ -13,56 +13,56 @@ Dynamo operations to benefit from default values, adding/removing elements, and 
 
 1. Instantiate a client and pass to the desired provider:
 
-```
+    ```
 
-from pynosql.credentials.aws import AWSCredentials
-from pynosql.clients.aws import AWSClient
-from pynosql.providers.dynamo import DynamoDBProvider
+    from pynosql.credentials.aws import AWSCredentials
+    from pynosql.clients.aws import AWSClient
+    from pynosql.providers.dynamo import DynamoDBProvider
 
-credentials = AWSCredentials(
-    'AKIAIOSFODNN7EXAMPLE',
-    'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
-)
+    credentials = AWSCredentials(
+        'AKIAIOSFODNN7EXAMPLE',
+        'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
+    )
 
-dynamo = DynamoDBProvider(
-    AWSClient(self.credentials, 'us-west-2')
-)
+    dynamo = DynamoDBProvider(
+        AWSClient(self.credentials, 'us-west-2')
+    )
 
-```
+    ```
 
 2. Extend base.model.Model to create the desired data structure to be stored in
 your NOSQL DB:
 
-```
+    ```
 
-from pynosql.base.model import Model
+    from pynosql.base.model import Model
 
-class TestModel(Model):
+    class TestModel(Model):
 
-    BASE = {
-        'test1': None,
-        'test2': None,
-        'test3': None,
-        'test4': None
-    }
+        BASE = {
+            'test1': None,
+            'test2': None,
+            'test3': None,
+            'test4': None
+        }
 
-    def __init__(self):
-        super(TestModel, self).__init__(self.BASE)
+        def __init__(self):
+            super(TestModel, self).__init__(self.BASE)
 
-```
+    ```
 
 3. Pass the model with the appropriate call to DynamoDB:
 
-```
+    ```
 
-key = {
-    'test1': 'value1',
-    'test2': 'value2'
-}
+    key = {
+        'test1': 'value1',
+        'test2': 'value2'
+    }
 
-response = dynamo.get_record(TestModel(), 'TestTable', Key=key)
+    response = dynamo.get_record(TestModel(), 'TestTable', Key=key)
 
-```
+    ```
 
 4. For paginating all results into the model, just keep passing the model
 instance into your DynamoDB calls.  The new records will be appended to the
