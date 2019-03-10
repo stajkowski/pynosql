@@ -7,26 +7,32 @@ from time import sleep
 
 
 class AWSClient(BaseClient):
-    """ AWS Session for Dynam0DB """
+    """ AWS Session for DynamoDB """
 
     RETRY_EXCEPTIONS = (
         'ProvisionedThroughputExceededException',
         'ThrottlingException'
     )
 
-    def __init__(self, credentials, region, retries=5, endpoint=None):
+    def __init__(self, credentials, region, retries=5,
+                 endpoint=None, mock=None):
         """ AWS Session for DynamoDB
 
         :param credentials: obj credentials
         :param region: str region name
         :param retries: int client retries
         :param endpoint: str endpoint url
+        :param mock: bool set to mock responses
         """
         self.credentials = credentials
         self.region = region
         self.retries = retries
         self.endpoint = endpoint
         self._client = self.initialize()
+        if mock is not None:
+            # if mock enabled the stub out
+            # responses to dynamo for testing.
+            mock(self._client)
 
     @property
     def client(self):
@@ -98,7 +104,8 @@ class AWSClient(BaseClient):
                 pass
             except Exception as e:
                 raise ClientException(
-                    'Unhandled exception calling client: {}.'.format(str(e))
+                    'Unhandled exception calling '
+                    'client: {}.'.format(str(e.message))
                 )
 
             sleep(2 ** retry_count)
