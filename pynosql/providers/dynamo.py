@@ -55,7 +55,7 @@ class DynamoDBProvider(BaseProvider):
 
         :param model: obj BaseModel
         :param table: str table
-        :return: bool status
+        :return: obj attributes
         :raises: ClientException
         """
         table = self._aws_client.client.Table(table)
@@ -67,12 +67,25 @@ class DynamoDBProvider(BaseProvider):
 
         :param model: obj BaseModel
         :param table: str table
-        :return: bool status
+        :return: obj attributes
         :raises: ClientException
         """
         table = self._aws_client.client.Table(table)
         response = self._aws_client.call(table.delete_item, **kwargs)
         return self._handle_response(model, response, 'Attributes')
+
+    def update_record(self, model, table, data, **kwargs):
+        """ Update record in DynamoDB
+
+        :param model: obj model to load record
+        :param table: str table
+        :param data: obj data to update record
+        :return: obj attributes
+        :raises: ClientException
+        """
+        self.get_record(model, table, **kwargs)
+        model.load(data)
+        self.put_record(model, table, Item=model.model)
 
     def _handle_response(self, model, data, key):
         """ Handle Response of Dynamo Operation
