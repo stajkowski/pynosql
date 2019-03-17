@@ -8,6 +8,8 @@ Dynamo operations to benefit from default values, adding/removing elements, and 
 
 # Versions
 0.0.1 - Support for basic CRUD operations in DynamoDB
+0.0.2 - Support for basic update of model with GET|PUT
+0.0.3 - Support for NotFound on single record and empty list for multiple records
 
 # Getting Started
 

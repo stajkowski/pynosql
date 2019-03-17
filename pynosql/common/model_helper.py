@@ -13,6 +13,7 @@ class ModelHelper(BaseModelHelper):
         self._base_model = copy.deepcopy(base_model)
         self._model = copy.deepcopy(self._base_model)
         self._model_list = []
+        self._model_is_list = False
 
     @property
     def model(self):
@@ -20,7 +21,7 @@ class ModelHelper(BaseModelHelper):
 
         :return: obj model
         """
-        if len(self._model_list) > 0:
+        if self._model_is_list:
             return self._model_list
         return self._model
 
@@ -31,12 +32,15 @@ class ModelHelper(BaseModelHelper):
         """
         self._model = copy.deepcopy(self._base_model)
 
-    def load(self, values):
+    def load(self, values, is_list=False):
         """ Load Model w/ Values
 
         :param values: obj values
+        :param is_list: bool if list expected
         :return: obj model
         """
+        # set list flag so that empty results can be handled
+        self._model_is_list = is_list
         if isinstance(values, list):
             # if the passed value is a list, then iterate
             # over each value and load the model, adding

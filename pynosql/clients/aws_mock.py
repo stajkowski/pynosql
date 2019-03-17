@@ -41,6 +41,36 @@ class AWSMockResponses(object):
         stub.activate()
 
     @staticmethod
+    def get_empty_item_response(client):
+        """ Mock Empty GetItem Response
+
+        :param client: obj AWS Client
+        :return: None
+        """
+        response = {
+            'ConsumedCapacity': {
+                'TableName': 'TestTable',
+                'CapacityUnits': 123.0,
+                'Table': {
+                    'CapacityUnits': 123.0
+                },
+                'LocalSecondaryIndexes': {
+                    'string': {
+                        'CapacityUnits': 123.0
+                    }
+                },
+                'GlobalSecondaryIndexes': {
+                    'string': {
+                        'CapacityUnits': 123.0
+                    }
+                }
+            }
+        }
+        stub = Stubber(client.meta.client)
+        stub.add_response('get_item', response)
+        stub.activate()
+
+    @staticmethod
     def query_response(client):
         """ Mock Query Response
 
@@ -97,6 +127,37 @@ class AWSMockResponses(object):
         stub.activate()
 
     @staticmethod
+    def empty_query_response(client):
+        """ Mock Empty Query Response
+
+        :param client: obj AWS Client
+        :return: None
+        """
+        response = {
+            'Items': [],
+            'ConsumedCapacity': {
+                'TableName': 'TestTable',
+                'CapacityUnits': 123.0,
+                'Table': {
+                    'CapacityUnits': 123.0
+                },
+                'LocalSecondaryIndexes': {
+                    'string': {
+                        'CapacityUnits': 123.0
+                    }
+                },
+                'GlobalSecondaryIndexes': {
+                    'string': {
+                        'CapacityUnits': 123.0
+                    }
+                }
+            }
+        }
+        stub = Stubber(client.meta.client)
+        stub.add_response('query', response)
+        stub.activate()
+
+    @staticmethod
     def scan_response(client):
         """ Mock Scan Response
 
@@ -130,6 +191,37 @@ class AWSMockResponses(object):
                     'test4': {'S': 'value16'},
                 },
             ],
+            'ConsumedCapacity': {
+                'TableName': 'TestTable',
+                'CapacityUnits': 123.0,
+                'Table': {
+                    'CapacityUnits': 123.0
+                },
+                'LocalSecondaryIndexes': {
+                    'string': {
+                        'CapacityUnits': 123.0
+                    }
+                },
+                'GlobalSecondaryIndexes': {
+                    'string': {
+                        'CapacityUnits': 123.0
+                    }
+                }
+            }
+        }
+        stub = Stubber(client.meta.client)
+        stub.add_response('scan', response)
+        stub.activate()
+
+    @staticmethod
+    def empty_scan_response(client):
+        """ Mock Empty Scan Response
+
+        :param client: obj AWS Client
+        :return: None
+        """
+        response = {
+            'Items': [],
             'ConsumedCapacity': {
                 'TableName': 'TestTable',
                 'CapacityUnits': 123.0,

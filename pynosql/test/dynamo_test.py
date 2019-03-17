@@ -2,7 +2,7 @@ import unittest
 from boto3.dynamodb.conditions import Key
 from pynosql.base.model import Model
 from pynosql.clients.aws_mock import AWSMockResponses
-from pynosql.providers.dynamo import DynamoDBProvider
+from pynosql.providers.dynamo import DynamoDBProvider, RecordNotFound
 from pynosql.credentials.aws import AWSCredentials
 from pynosql.clients.aws import AWSClient
 
@@ -54,6 +54,25 @@ class TestSetup(unittest.TestCase):
 
         self.assertDictEqual(response, expected)
 
+    def test_get_item_not_found(self):
+        """ Test get_item not found from dynamodb table """
+        key = {
+            'test1': 'value1',
+            'test2': 'value2'
+        }
+        dynamo = DynamoDBProvider(
+            AWSClient(self.credentials,
+                      'us-west-2',
+                      mock=AWSMockResponses.get_empty_item_response)
+        )
+        try:
+            dynamo.get_record(TestModel(), 'TestTable', Key=key)
+            self.fail('Expected exception not raised.')
+        except RecordNotFound as e:
+            pass
+        except Exception as e:
+            self.fail('Unexpected exception: {}'.format(str(e.message)))
+
     def test_basic_query(self):
         """ Test basic query from DynamoDB table """
         expected = [
@@ -95,6 +114,22 @@ class TestSetup(unittest.TestCase):
 
         self.assertListEqual(response, expected)
 
+    def test_empty_query(self):
+        """ Test empty query from DynamoDB table """
+        expected = []
+        dynamo = DynamoDBProvider(
+            AWSClient(self.credentials,
+                      'us-west-2',
+                      mock=AWSMockResponses.empty_query_response)
+        )
+        response = dynamo.get_records(
+            TestModel(), 'TestTable',
+            KeyConditionExpression=Key('test1').eq('value1'),
+            IndexName='TestIndex'
+        )
+
+        self.assertListEqual(response, expected)
+
     def test_basic_scan(self):
         """ Test basic scan from DynamoDB table """
         expected = [
@@ -127,6 +162,22 @@ class TestSetup(unittest.TestCase):
             AWSClient(self.credentials,
                       'us-west-2',
                       mock=AWSMockResponses.scan_response)
+        )
+        response = dynamo.scan_records(
+            TestModel(), 'TestTable',
+            FilterExpression=Key('test1').eq('value1'),
+            IndexName='TestIndex'
+        )
+
+        self.assertListEqual(response, expected)
+
+    def test_empty_scan(self):
+        """ Test empty scan from DynamoDB table """
+        expected = []
+        dynamo = DynamoDBProvider(
+            AWSClient(self.credentials,
+                      'us-west-2',
+                      mock=AWSMockResponses.empty_scan_response)
         )
         response = dynamo.scan_records(
             TestModel(), 'TestTable',

@@ -8,6 +8,13 @@ class UnhandledProviderException(Exception):
         self.message = msg
 
 
+class RecordNotFound(Exception):
+    """ Record Not Found Exception """
+
+    def __init__(self, msg):
+        self.message = msg
+
+
 class BaseProvider():
     """ Base NOSQL Provider """
 

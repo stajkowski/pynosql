@@ -214,5 +214,5 @@ class TestSetup(unittest.TestCase):
             'test3': None,
             'test4': None
         })
-        mh.load(values)
+        mh.load(values, True)
         self.assertListEqual(mh.model, expected)

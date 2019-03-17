@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pynosql",
-    version="0.0.2",
+    version="0.0.3",
     author="Brian Stajkowski",
     author_email="stajkowski100@gmail.com",
     description="A NOSQL DB Library for Python",

@@ -25,10 +25,11 @@ class Model(BaseModel):
         """
         self.mh.reset()
 
-    def load(self, values):
+    def load(self, values, is_list=False):
         """ Load Model Values
 
         :param values: obj values
+        :param is_list: bool if list expected
         :return: obj model
         """
-        return self.mh.load(values)
+        return self.mh.load(values, is_list)

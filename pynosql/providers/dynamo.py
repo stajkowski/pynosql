@@ -1,5 +1,5 @@
 from pynosql.providers.base_provider import BaseProvider, \
-    UnhandledProviderException
+    UnhandledProviderException, RecordNotFound
 
 
 class DynamoDBProvider(BaseProvider):
@@ -35,7 +35,7 @@ class DynamoDBProvider(BaseProvider):
         """
         table = self._aws_client.client.Table(table)
         response = self._aws_client.call(table.query, **kwargs)
-        return self._handle_response(model, response, 'Items')
+        return self._handle_response(model, response, 'Items', True)
 
     def scan_records(self, model, table, **kwargs):
         """ Get multiple records from DB through scan without index
@@ -48,7 +48,7 @@ class DynamoDBProvider(BaseProvider):
         """
         table = self._aws_client.client.Table(table)
         response = self._aws_client.call(table.scan, **kwargs)
-        return self._handle_response(model, response, 'Items')
+        return self._handle_response(model, response, 'Items', True)
 
     def put_record(self, model, table, **kwargs):
         """ Put record into DB
@@ -87,12 +87,13 @@ class DynamoDBProvider(BaseProvider):
         model.load(data)
         self.put_record(model, table, Item=model.model)
 
-    def _handle_response(self, model, data, key):
+    def _handle_response(self, model, data, key=None, is_list=False):
         """ Handle Response of Dynamo Operation
 
         :param model: obj model
         :param data: obj data
         :param key: str key
+        :param is_list: bool if list expected
         :return: obj model
         """
         try:
@@ -101,16 +102,20 @@ class DynamoDBProvider(BaseProvider):
             # and return the model
             if data and key in data:
                 if isinstance(data[key], list):
-                    return model.load(list(data[key]))
+                    return model.load(list(data[key]), is_list)
                 else:
-                    return model.load(dict(data[key]))
+                    return model.load(dict(data[key]), is_list)
+            elif data and key and key not in data:
+                raise RecordNotFound('Record Not Found.')
             elif data and not key:
                 # in cases where no key is required to parse the
                 # response, load the model
-                return model.load(dict(data))
+                return model.load(dict(data), is_list)
             else:
                 # else return the empty model
-                return model.model
+                raise RecordNotFound('Record Not Found.')
+        except RecordNotFound:
+            raise
         except Exception as e:
             raise UnhandledProviderException(
                 'UnhandledProviderException: {}'.format(str(e.message)))
