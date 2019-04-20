@@ -60,7 +60,7 @@ class DynamoDBProvider(BaseProvider):
         """
         table = self._aws_client.client.Table(table)
         response = self._aws_client.call(table.put_item, **kwargs)
-        return self._handle_response(model, response, 'Attributes')
+        return self._handle_response(model, kwargs['Item'])
 
     def delete_record(self, model, table, **kwargs):
         """ Delete record from DB
@@ -71,7 +71,9 @@ class DynamoDBProvider(BaseProvider):
         :raises: ClientException
         """
         table = self._aws_client.client.Table(table)
-        response = self._aws_client.call(table.delete_item, **kwargs)
+        response = self._aws_client.call(
+            table.delete_item, ReturnValues='ALL_OLD', **kwargs
+        )
         return self._handle_response(model, response, 'Attributes')
 
     def update_record(self, model, table, data, **kwargs):
