@@ -106,14 +106,16 @@ class DynamoDBProvider(BaseProvider):
                 else:
                     return model.load(dict(data[key]), is_list)
             elif data and key and key not in data:
-                raise RecordNotFound('Record Not Found.')
+                raise RecordNotFound('Record not found with '
+                                     'data: {} and key {}.'.format(data, key))
             elif data and not key:
                 # in cases where no key is required to parse the
                 # response, load the model
                 return model.load(dict(data), is_list)
             else:
                 # else return the empty model
-                raise RecordNotFound('Record Not Found.')
+                raise RecordNotFound('Record not found with '
+                                     'data: {} and key {}.'.format(data, key))
         except RecordNotFound:
             raise
         except Exception as e:
